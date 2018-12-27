@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+  app:
+    image: nearby_shops
+    build: .
+    ports:
+      - 8000:8000
+    command: ["./docker/wait-for-postgres.sh", "db", "./docker/init.sh"]
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+  db:
+    image: kartoza/postgis
+    hostname: db
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - POSTGRES_DBNAME=gis
